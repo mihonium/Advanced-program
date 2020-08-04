@@ -1,40 +1,60 @@
 #include <stdio.h>
-#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 int main()
 {
     FILE*file1,*file2;
-    char s[40],ts[15];
-    double time[51];
+    char s[40],ts[15],as[15],bs[15];
+    double time[51],a[51],b[51],c[51],d[51];
     int t,i,j;
+    printf("19T0845H\tMihoKiyokawa\n");
     file1=fopen("inputdata.txt","r");
     if((file1=fopen("inputdata.txt","r"))==NULL)
     {
         printf("can't open file inputdata.txt\n");
-        return 1;
+        exit(1);
     }
     file2=fopen("outputdata.csv","w");
-    if((file1=fopen("outputdata.csv","w"))==NULL)
+    if((file2=fopen("outputdata.csv","w"))==NULL)
     {
         printf("can't open file outputdata.csv\n");
-        return 1;
+        exit(1);
     }
     fgets(s,39,file1);
     for(t=0;t<51;t++)
     {
         fgets(s,39,file1);
-        printf("%s\n",s);
+        i=0;
+        for(j=0;s[i]!='\t';j++,i++)
+        {
+            ts[j]=s[i]+'\0';
+        }
+        time[t]=atof(ts);
+        
+        i+=1;
+        for(j=0;s[i]!='\t';j++,i++)
+        {
+            as[j]=s[i]+'\0';
+        }
+        a[t]=atof(as);
+       
+        
+        for(j=0;s[i]!='\n';j++,i++)
+        {
+            bs[j]=s[i]+'\n';
+        }
+        
+        b[t]=atof(bs);
+        
+        c[t]=a[t]+b[t];
+        d[t]=(a[t]*a[t])+(b[t]*b[t]);
+        if(t==0)
+        {
+            fprintf(file2,"time,c,d\n");
+        }
+        fprintf(file2,"%f,%f,%f\n",time,c,d);
     }
-    i=0;
-    for(j=0;s[i]!='\t';j++,i++)
-    {
-        ts[j]=s[i];
-    }
-    ts[j]='\0';
-    time[t]= atof(ts);
-    printf("%s\n",ts);
-    printf("%f\n",time[t]);
-    fprintf("outputdata.csv","%s,%f\n");
+    
     fclose(file1);
     fclose(file2);
     return 0;
